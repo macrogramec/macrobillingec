@@ -8,7 +8,24 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 
-
+/**
+ * @OA\Schema(
+ *     schema="User",
+ *     required={"name", "email", "password"},
+ *     @OA\Property(property="id", type="integer", format="int64", example=1),
+ *     @OA\Property(property="name", type="string", example="John Doe"),
+ *     @OA\Property(property="email", type="string", format="email", example="johndoe@example.com"),
+ *     @OA\Property(property="email_verified_at", type="string", format="date-time", nullable=true),
+ *     @OA\Property(property="created_at", type="string", format="date-time"),
+ *     @OA\Property(property="updated_at", type="string", format="date-time"),
+ *     @OA\Property(
+ *         property="scopes",
+ *         type="array",
+ *         @OA\Items(type="string", enum={"admin", "user", "desarrollo", "produccion"}),
+ *         example={"user", "desarrollo"}
+ *     )
+ * )
+ */
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */

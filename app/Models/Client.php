@@ -4,7 +4,27 @@ namespace App\Models;
 
 use Laravel\Passport\Client as PassportClient;
 
-
+/**
+ * @OA\Schema(
+ *     schema="Client",
+ *     required={"name"},
+ *     @OA\Property(property="id", type="integer", format="int64", example=1),
+ *     @OA\Property(property="user_id", type="integer", format="int64", nullable=true, example=1),
+ *     @OA\Property(property="name", type="string", example="API Client"),
+ *     @OA\Property(property="secret", type="string", example="abcdef123456"),
+ *     @OA\Property(
+ *         property="environments",
+ *         type="array",
+ *         @OA\Items(type="string", enum={"desarrollo", "produccion"}),
+ *         example={"desarrollo", "produccion"}
+ *     ),
+ *     @OA\Property(property="personal_access_client", type="boolean", example=false),
+ *     @OA\Property(property="password_client", type="boolean", example=true),
+ *     @OA\Property(property="revoked", type="boolean", example=false),
+ *     @OA\Property(property="created_at", type="string", format="date-time"),
+ *     @OA\Property(property="updated_at", type="string", format="date-time")
+ * )
+ */
 class Client extends PassportClient
 {
     protected $fillable = [

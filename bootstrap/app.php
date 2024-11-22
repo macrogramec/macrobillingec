@@ -7,6 +7,7 @@ use App\Http\Middleware\CheckScopes;
 use App\Http\Middleware\ClientRateLimiting;
 use App\Http\Middleware\Cors;
 use App\Http\Middleware\ApiLogging;
+use App\Http\Middleware\ContentSecurityPolicy;
 
 
 
@@ -20,6 +21,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         //
+        $middleware->use([
+            \App\Http\Middleware\ContentSecurityPolicy::class
+        ]);
         $middleware->alias([
             'scope' => CheckScopes::class,
     	    'client.limit' => ClientRateLimiting::class,

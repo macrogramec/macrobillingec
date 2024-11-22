@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Middleware\CheckScopes;
 use App\Http\Controllers\AdminController;
 
+
 Route::middleware(['cors', 'api.logging'])->group(function () {
     // Rutas sin autenticaci—n (no aplicamos rate limiting aqu’ ya que son rutas pœblicas)
     Route::post('/create-first-admin', [AdminController::class, 'createFirstAdmin']);
