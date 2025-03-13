@@ -15,8 +15,12 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call([
-            FormasPagoSeeder::class,
+          //  FormasPagoSeeder::class,
+            TiposImpuestosSeeder::class,
+            TarifasImpuestosSeeder::class,
+            CondicionesImpuestosSeeder::class,
+            CodigoRetencionSeeder::class
         ]);
-        
+
     }
 }

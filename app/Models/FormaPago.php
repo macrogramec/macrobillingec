@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class FormaPago extends Model
 {
@@ -28,30 +27,26 @@ class FormaPago extends Model
         'activo' => 'boolean'
     ];
 
-    // Constantes seg鷑 cat醠ogo SRI
     const FORMAS_PAGO = [
-        '01' => 'Sin utilizaci髇 del sistema financiero',
-        '15' => 'Compensaci髇 de deudas',
-        '16' => 'Tarjeta de d閎ito',
-        '17' => 'Dinero electr髇ico',
+        '01' => 'Sin utilizaci贸n del sistema financiero',
+        '15' => 'Compensaci贸n de deudas',
+        '16' => 'Tarjeta de d茅bito',
+        '17' => 'Dinero electr贸nico',
         '18' => 'Tarjeta prepago',
-        '19' => 'Tarjeta de cr閐ito',
-        '20' => 'Otros con utilizaci髇 del sistema financiero',
-        '21' => 'Endoso de t韙ulos',
-        // Formas de pago v2.1.0
+        '19' => 'Tarjeta de cr茅dito',
+        '20' => 'Otros con utilizaci贸n del sistema financiero',
+        '21' => 'Endoso de t铆tulos',
         '22' => 'Giro',
-        '23' => 'Dep髎ito en cuenta',
+        '23' => 'Dep贸sito en cuenta',
         '24' => 'Transferencia bancaria',
         '25' => 'Tarjeta de regalo o vale'
     ];
 
-    // Relaci髇 con los pagos de facturas
     public function facturaPagos()
     {
         return $this->hasMany(FacturaPago::class, 'formaPago', 'codigo');
     }
 
-    // M閠odo para obtener formas de pago por versi髇
     public static function getFormasPagoPorVersion($version)
     {
         return self::where('version_desde', '<=', $version)

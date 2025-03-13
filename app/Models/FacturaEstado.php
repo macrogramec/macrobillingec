@@ -85,7 +85,6 @@ class FacturaEstado extends Model
         'historial_cambios' => 'array'
     ];
 
-    // Estados del documento
     const ESTADO = [
         'CREADA' => 'CREADA',
         'FIRMADA' => 'FIRMADA',
@@ -95,7 +94,6 @@ class FacturaEstado extends Model
         'ANULADA' => 'ANULADA'
     ];
 
-    // Estados del SRI
     const ESTADO_SRI = [
         'RECIBIDA' => 'RECIBIDA',
         'EN_PROCESO' => 'EN PROCESO',
@@ -104,7 +102,6 @@ class FacturaEstado extends Model
         'ANULADA' => 'ANULADA'
     ];
 
-    // Estados de jobs
     const JOB_STATUS = [
         'PENDIENTE' => 'PENDIENTE',
         'EN_PROCESO' => 'EN PROCESO',
@@ -149,8 +146,8 @@ class FacturaEstado extends Model
 
     public function necesitaReintento()
     {
-        return $this->numero_intentos < 3 && 
-               !in_array($this->estado_actual, ['AUTORIZADA', 'ANULADA']) &&
-               $this->requiere_reenvio;
+        return $this->numero_intentos < 3 &&
+            !in_array($this->estado_actual, ['AUTORIZADA', 'ANULADA']) &&
+            $this->requiere_reenvio;
     }
 }

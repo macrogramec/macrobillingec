@@ -96,7 +96,11 @@ return [
             ],
             'processors' => [PsrLogMessageProcessor::class],
         ],
-
+        'custom_log' => [
+            'driver' => 'single', // Para un solo archivo de log
+            'path' => storage_path('logs/custom_log.log'), // Ruta del archivo de log
+            'level' => 'info', // El nivel de log (info, error, etc.)
+        ],
         'stderr' => [
             'driver' => 'monolog',
             'level' => env('LOG_LEVEL', 'debug'),
@@ -136,13 +140,55 @@ return [
             'days' => 14,
             'formatter' => JsonFormatter::class,
         ],
-        
+
         'api_errors' => [
             'driver' => 'daily',
             'path' => storage_path('logs/api/errors.log'),
             'level' => 'error',
             'days' => 30,
             'formatter' => JsonFormatter::class,
+        ],
+        'facturas' => [
+            'driver' => 'daily',  // Usa el controlador 'daily' para crear un archivo por día
+            'path' => storage_path('logs/facturas/logs_facturas_'). date('Y-m-d') . '.log', // Ruta donde se guardarán los logs de facturas
+            'level' => 'info',  // Nivel de log
+            'days' => 30, // Cuántos días quieres conservar los logs
+        ],
+
+        // Canal para Notas de Crédito
+        'notas_credito' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/notas_credito/logs_notas_credito_'). '.log',
+            'level' => 'info',
+            'days' => 30,
+        ],
+
+        // Canal para Guias
+        'guias' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/guias/logs_guias_'). '.log',
+            'level' => 'info',
+            'days' => 30,
+        ],
+        // Canal para Liquidacion
+        'liquidacion' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/liquidacion/logs_liquidacion_').  '.log',
+            'level' => 'info',
+            'days' => 30,
+        ],
+        // Canal para retenciones
+        'retenciones' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/retenciones/logs_retenciones_'). '.log',
+            'level' => 'info',
+            'days' => 30,
+        ],
+        'general' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/general/logs_general_'). '.log',
+            'level' => 'info',
+            'days' => 30,
         ],
 
     ],

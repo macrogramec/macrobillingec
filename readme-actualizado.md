@@ -159,3 +159,203 @@ php artisan db:seed --class=FormasPagoSeeder
 ---
 
 **© 2024 MACROGRAM CIA LTDA. Todos los derechos reservados.**
+
+
+Sí, aquí está el texto formateado para el Project Knowledge. Deberíamos empezar con:
+
+# Sistema de Facturación Electrónica - Project Knowledge
+
+<info>
+Este documento contiene la información y conocimiento acumulado del proyecto de Sistema de Facturación Electrónica para Ecuador, incluyendo sus módulos, componentes y consideraciones técnicas.
+</info>
+
+## 1. Estructura del Sistema
+
+### 1.1 Módulos Principales
+
+#### Módulo de Gestión Empresarial
+El sistema está estructurado en tres niveles jerárquicos principales:
+
+1. **Empresas**
+    - Entidad principal que contiene la información fiscal
+    - Maneja datos de contribuyente
+    - Controla ambientes globales
+
+2. **Establecimientos**
+    - Sucursales o puntos de operación
+    - Dependientes de una empresa
+    - Manejan configuraciones independientes
+
+3. **Puntos de Emisión**
+    - Puntos específicos de facturación
+    - Control de secuenciales
+    - Asociados a establecimientos
+
+### 1.2 Arquitectura REST
+
+#### Estructura de Endpoints
+La API sigue una estructura jerárquica de recursos:
+
+```
+/api/empresas
+    /{empresa_id}/establecimientos
+        /{establecimiento_id}/puntos-emision
+            /{punto_emision_id}/secuencial
+```
+
+#### Documentación Swagger
+- Disponible en `/api/documentation`
+- Incluye todos los endpoints
+- Muestra esquemas de datos
+- Proporciona ejemplos de uso
+
+## 2. Reglas de Negocio
+
+### 2.1 Validaciones de Empresa
+
+- **RUC**:
+    - Debe tener 13 dígitos
+    - Debe ser válido según algoritmo módulo 11
+    - Debe ser único en el sistema
+
+- **Información Fiscal**:
+  ```json
+  {
+    "ruc": "0992877878001",
+    "razon_social": "EMPRESA EJEMPLO S.A.",
+    "obligado_contabilidad": true,
+    "contribuyente_especial": "12345",
+    "ambiente": "produccion|pruebas",
+    "tipo_emision": "normal|contingencia"
+  }
+  ```
+
+### 2.2 Validaciones de Establecimiento
+
+- **Código**:
+    - 3 dígitos numéricos
+    - Único por empresa
+    - Formato: "001", "002", etc.
+
+- **Estados**:
+  ```json
+  {
+    "estado": "activo|inactivo",
+    "ambiente": "produccion|pruebas"
+  }
+  ```
+
+### 2.3 Validaciones de Punto de Emisión
+
+- **Código**:
+    - 3 dígitos numéricos
+    - Único por establecimiento
+
+- **Tipos de Comprobante**:
+  ```json
+  {
+    "tipo_comprobante": {
+      "01": "Factura",
+      "02": "Nota de Débito",
+      "03": "Nota de Crédito",
+      "04": "Guía de Remisión",
+      "05": "Comprobante de Retención",
+      "06": "Nota de Crédito",
+      "07": "Comprobante Complementario"
+    }
+  }
+  ```
+
+## 3. Implementación Técnica
+
+### 3.1 Estructura de Base de Datos
+```sql
+-- Empresas
+CREATE TABLE empresas (
+    id BIGINT PRIMARY KEY,
+    ruc VARCHAR(13) UNIQUE,
+    razon_social VARCHAR(300),
+    ambiente ENUM('produccion', 'pruebas'),
+    -- otros campos fiscales
+);
+
+-- Establecimientos
+CREATE TABLE establecimientos (
+    id BIGINT PRIMARY KEY,
+    empresa_id BIGINT,
+    codigo CHAR(3),
+    estado ENUM('activo', 'inactivo'),
+    UNIQUE(empresa_id, codigo)
+);
+
+-- Puntos de Emisión
+CREATE TABLE puntos_emision (
+    id BIGINT PRIMARY KEY,
+    establecimiento_id BIGINT,
+    codigo CHAR(3),
+    tipo_comprobante CHAR(2),
+    secuencial_actual BIGINT,
+    UNIQUE(establecimiento_id, codigo, tipo_comprobante)
+);
+```
+
+### 3.2 Ejemplos de Uso
+
+#### Crear Nueva Empresa
+```bash
+curl -X POST http://api.ejemplo.com/api/empresas \
+  -H "Authorization: Bearer {token}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "ruc": "0992877878001",
+    "razon_social": "EMPRESA EJEMPLO S.A.",
+    "ambiente": "produccion"
+  }'
+```
+
+#### Añadir Establecimiento
+```bash
+curl -X POST http://api.ejemplo.com/api/empresas/1/establecimientos \
+  -H "Authorization: Bearer {token}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "codigo": "001",
+    "direccion": "Guayaquil - Ecuador",
+    "estado": "activo"
+  }'
+```
+
+## 4. Consideraciones de Seguridad
+
+### 4.1 Autenticación
+- OAuth2 implementado
+- Tokens con tiempo de expiración
+- Scopes por tipo de operación
+
+### 4.2 Validaciones
+- Sanitización de entradas
+- Validación de RUC
+- Control de secuenciales
+- Verificación de dependencias
+
+## 5. Próximos Desarrollos
+
+- [ ] Implementación de firma electrónica
+- [ ] Conexión con servicios del SRI
+- [ ] Sistema de notificaciones
+- [ ] Reportes y estadísticas
+
+## 6. Contacto y Soporte
+
+**MACROGRAM CIA LTDA.**
+- Ubicación: Guayaquil - Daule - Ecuador
+- Email: soporte@macrobilling.com
+- Teléfono: +593 4 123 4567
+
+---
+
+<note>
+Este documento debe ser actualizado conforme se implementen nuevas características o se realicen cambios significativos en el sistema.
+</note>
+
+¿Necesitas que profundicemos en alguna sección específica o que agreguemos información adicional?

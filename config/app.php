@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'timezone' => env('APP_TIMEZONE', 'UTC'),
+    'timezone' => env('APP_TIMEZONE', 'America/Guayaquil'),
 
     /*
     |--------------------------------------------------------------------------
@@ -122,5 +122,6 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
-
+    'web_services_wsd' => env('WEB_SERVICES_WSD', 'http://172.30.2.28:8050/SERV_RECIBI_JSON_APIS.svc?singleWsdl'),
+    'web_services_url' => env('WEB_SERVICES_URL', 'http://172.30.2.28:8050/SERV_RECIBI_JSON_APIS.svc'),
 ];

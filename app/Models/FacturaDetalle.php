@@ -49,29 +49,43 @@ class FacturaDetalle extends Model
     ];
 
     protected $casts = [
-        'detallesAdicionales' => 'array'
+        'cantidad' => 'decimal:6',
+        'precioUnitario' => 'decimal:6',
+        'precioSinSubsidio' => 'decimal:6',
+        'descuento' => 'decimal:2',
+        'precioTotalSinImpuesto' => 'decimal:2',
+        'detallesAdicionales' => 'json',
+        'impuesto_tarifa' => 'decimal:2',
+        'impuesto_baseImponible' => 'decimal:2',
+        'impuesto_valor' => 'decimal:2',
+        'ice_tarifa' => 'decimal:2',
+        'ice_baseImponible' => 'decimal:2',
+        'ice_valor' => 'decimal:2',
+        'irbpnr_tarifa' => 'decimal:2',
+        'irbpnr_baseImponible' => 'decimal:2',
+        'irbpnr_valor' => 'decimal:2',
+        'precioUnitarioSubsidio' => 'decimal:6'
     ];
 
-    // Constantes para tipos de impuestos
     const IMPUESTO_IVA = [
         '0' => '0%',
+        '4' => '15%',
         '2' => '12%',
         '3' => '14%',
         '6' => 'No Objeto de Impuesto',
         '7' => 'Exento de IVA'
     ];
 
-    // Catálogo para unidades de medida v2.1.0
     const UNIDADES_MEDIDA = [
         'UNIDAD' => 'Unidad',
         'KILOGRAMO' => 'Kilogramo',
         'LITRO' => 'Litro',
-        'GALON' => 'Galón',
+        'GALON' => 'GalÃ³n',
         'METRO' => 'Metro',
         'METRO2' => 'Metro cuadrado',
-        'METRO3' => 'Metro cúbico',
+        'METRO3' => 'Metro cÃºbico',
         'HORA' => 'Hora',
-        'DIA' => 'Día',
+        'DIA' => 'DÃ­a',
         'ACTIVIDAD' => 'Actividad',
         'SERVICIO' => 'Servicio'
     ];
@@ -81,53 +95,28 @@ class FacturaDetalle extends Model
         return $this->belongsTo(Factura::class);
     }
 
-    // Calcula el valor del IVA
+    public function impuestos()
+    {
+        return $this->hasMany(FacturaDetalleImpuesto::class, 'factura_detalle_id');
+    }
+
+    public function ice()
+    {
+        return $this->hasOne(FacturaDetalleIce::class, 'factura_detalle_id');
+    }
+
+    public function irbpnr()
+    {
+        return $this->hasOne(FacturaDetalleIrbpnr::class, 'factura_detalle_id');
+    }
+
     public function calcularIVA()
     {
         return $this->impuesto_baseImponible * ($this->impuesto_tarifa / 100);
     }
 
-    // Calcula el subtotal con descuento
     public function calcularSubtotal()
     {
         return ($this->cantidad * $this->precioUnitario) - $this->descuento;
-    }
-
-    // Validaciones específicas según versión
-    public function validarVersion()
-    {
-        switch($this->version) {
-            case '2.1.0':
-                return $this->validarV210();
-            case '2.0.0':
-                return $this->validarV200();
-            default:
-                return $this->validarV100();
-        }
-    }
-
-    // Método para generar la estructura XML según la versión
-    public function toXML()
-    {
-        switch($this->version) {
-            case '2.1.0':
-                return $this->toXMLV210();
-            case '2.0.0':
-                return $this->toXMLV200();
-            default:
-                return $this->toXMLV100();
-        }
-    }
-
-    // Agregar detalle adicional
-    public function agregarDetalleAdicional($nombre, $valor)
-    {
-        $detalles = $this->detallesAdicionales ?? [];
-        $detalles[] = [
-            'nombre' => $nombre,
-            'valor' => $valor
-        ];
-        $this->detallesAdicionales = $detalles;
-        $this->save();
     }
 }

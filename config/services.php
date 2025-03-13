@@ -34,5 +34,8 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
-
+    'sri' => [
+        'usuario' => env('SRI_USUARIO'),
+        'password' => env('SRI_PASSWORD'),
+    ],
 ];

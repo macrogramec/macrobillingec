@@ -14,6 +14,9 @@ class Factura extends Model
         'uuid',
         'estado',
         'version',
+        'empresa_id',
+        'establecimiento_id',
+        'punto_emision_id',
         'ambiente',
         'tipoEmision',
         'razonSocial',
@@ -42,6 +45,7 @@ class Factura extends Model
         'razonSocialComprador',
         'identificacionComprador',
         'direccionComprador',
+        'emailComprador',
         'placa',
         'totalSinImpuestos',
         'totalSubsidio',
@@ -83,7 +87,7 @@ class Factura extends Model
     ];
 
     protected $casts = [
-        'fechaEmision' => 'date',
+        'fechaEmision' => 'string',
         'fechaAutorizacion' => 'datetime',
         'infoAdicional' => 'array',
         'motivos' => 'array',
@@ -91,15 +95,13 @@ class Factura extends Model
         'procesadoSri' => 'boolean'
     ];
 
-    // Constantes para versiones soportadas
     const VERSIONES_SOPORTADAS = [
-        '1.0.0' => 'Versi髇 Original',
-        '1.1.0' => 'Primera Actualizaci髇',
-        '2.0.0' => 'Segunda Versi髇',
-        '2.1.0' => '趌tima Versi髇'
+        '1.0.0' => 'Versi贸n Original',
+        '1.1.0' => 'Primera Actualizaci贸n',
+        '2.0.0' => 'Segunda Versi贸n',
+        '2.1.0' => '脷ltima Versi贸n'
     ];
 
-    // Constantes del SRI
     const TIPO_IDENTIFICACION = [
         '04' => 'RUC',
         '05' => 'CEDULA',
@@ -128,40 +130,47 @@ class Factura extends Model
     ];
 
     const TIPO_PROVEEDOR_RIMPE = [
-        '01' => 'Contribuyente R間imen RIMPE',
-        '02' => 'No Contribuyente R間imen RIMPE'
+        '01' => 'Contribuyente R茅gimen RIMPE',
+        '02' => 'No Contribuyente R茅gimen RIMPE'
     ];
 
-    // M閠odo para validar campos seg鷑 la versi髇
-    public function validarVersionCampos()
+    public function detalles()
     {
-        if ($this->version >= '2.1.0') {
-            // Validaciones espec韋icas para v2.1.0
-            return $this->validarV210();
-        } elseif ($this->version >= '2.0.0') {
-            // Validaciones espec韋icas para v2.0.0
-            return $this->validarV200();
-        } else {
-            // Validaciones para versiones 1.x.x
-            return $this->validarV100();
-        }
+        return $this->hasMany(FacturaDetalle::class);
     }
 
-    // M閠odo para generar XML seg鷑 la versi髇
-    public function generarXML()
+    public function impuestos()
     {
-        if ($this->version >= '2.1.0') {
-            return $this->generarXMLV210();
-        } elseif ($this->version >= '2.0.0') {
-            return $this->generarXMLV200();
-        } else {
-            return $this->generarXMLV100();
-        }
+        return $this->hasMany(FacturaImpuesto::class);
     }
 
-    // Generaci髇 de clave de acceso (mismo m閠odo que antes)
-    public function generarClaveAcceso()
+    public function pagos()
     {
-        // ... c骴igo existente ...
+        return $this->hasMany(FacturaPago::class);
+    }
+
+    public function detallesAdicionales()
+    {
+        return $this->hasMany(FacturaDetalleAdicional::class);
+    }
+
+    public function estados()
+    {
+        return $this->hasMany(FacturaEstado::class);
+    }
+
+    public function empresa()
+    {
+        return $this->belongsTo(Empresa::class);
+    }
+
+    public function establecimiento()
+    {
+        return $this->belongsTo(Establecimiento::class);
+    }
+
+    public function puntoEmision()
+    {
+        return $this->belongsTo(PuntoEmision::class);
     }
 }

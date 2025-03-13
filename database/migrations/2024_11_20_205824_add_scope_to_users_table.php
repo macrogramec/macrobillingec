@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             //
-            $table->json('scope')->nullable()->after('password');
+            $table->json('scopes')->nullable()->after('password');
         });
     }
 
@@ -24,7 +24,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             //
-            $table->dropColumn('scope');
+            $table->dropColumn('scopes');
         });
     }
 };

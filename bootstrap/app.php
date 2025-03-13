@@ -3,12 +3,14 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Console\Scheduling\Schedule;
 use App\Http\Middleware\CheckScopes;
 use App\Http\Middleware\ClientRateLimiting;
 use App\Http\Middleware\Cors;
 use App\Http\Middleware\ApiLogging;
 use App\Http\Middleware\ContentSecurityPolicy;
-
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 
 
@@ -34,4 +36,25 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
+        $exceptions->renderable(function (MethodNotAllowedHttpException $e) {
+            if (request()->is('api/facturacion/*')) {
+                return response()->json([
+                    'success' => false,
+                    'data' => null,
+                    'message' => 'Error de validación',
+                    'error' => 'La clave de acceso debe contener exactamente 49 dígitos numéricos'
+                ], 400);
+            }
+        });
+
+        $exceptions->renderable(function (NotFoundHttpException $e) {
+            if (request()->is('api/facturacion/*')) {
+                return response()->json([
+                    'success' => false,
+                    'data' => null,
+                    'message' => 'Error de validación',
+                    'error' => 'La clave de acceso debe contener exactamente 49 dígitos numéricos'
+                ], 400);
+            }
+        });
     })->create();

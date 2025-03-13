@@ -37,6 +37,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'uuid',
         'name',
         'email',
         'password',
@@ -77,11 +78,37 @@ class User extends Authenticatable
         return json_decode($value, true);
     }
 
-    // Validación de scopes
+    // Validaciï¿½n de scopes
+    /*
     public function hasScopes(array $requiredScopes)
     {
         $userScopes = $this->scopes ?? [];
         return count(array_intersect($requiredScopes, $userScopes)) === count($requiredScopes);
     }
-    
+    */
+    // App/Models/User.php
+
+    public function hasScopes(array $requiredScopes): bool
+    {
+        $userScopes = $this->scopes ?? [];
+
+        // Expandir los scopes que contengan |
+        $expandedScopes = [];
+        foreach ($requiredScopes as $scope) {
+            $expandedScopes = array_merge(
+                $expandedScopes,
+                explode('|', $scope)
+            );
+        }
+
+        // Verificar si el usuario tiene al menos uno de los scopes requeridos
+        foreach ($userScopes as $userScope) {
+            if (in_array($userScope, $expandedScopes)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }

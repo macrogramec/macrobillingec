@@ -10,16 +10,16 @@ return new class extends Migration
     {
         Schema::create('facturas', function (Blueprint $table) {
             $table->id();
-            
+
             // Control interno del sistema
             $table->uuid('uuid')->unique();
             $table->string('estado', 20)->default('CREADA');
-            
+
             // Control de versiones
             $table->string('version', 5); // 1.0.0, 1.1.0, 2.0.0, 2.1.0
 
             // infoTributario (Compatible con todas las versiones)
-            $table->string('ambiente', 1); // 1: Pruebas, 2: Producción
+            $table->string('ambiente', 1); // 1: Pruebas, 2: Producciï¿½n
             $table->string('tipoEmision', 1)->default('1');
             $table->string('razonSocial', 300);
             $table->string('nombreComercial', 300)->nullable();
@@ -44,13 +44,14 @@ return new class extends Migration
             $table->string('puertoDestino', 300)->nullable(); // v2.1.0
             $table->string('paisDestino', 3)->nullable(); // v2.1.0
             $table->string('paisAdquisicion', 3)->nullable(); // v2.1.0
-            
+
             // Datos del comprador
             $table->string('tipoIdentificacionComprador', 2);
             $table->string('guiaRemision', 20)->nullable();
             $table->string('razonSocialComprador', 300);
             $table->string('identificacionComprador', 20);
             $table->string('direccionComprador', 300)->nullable();
+            $table->string('emailComprador', 300)->nullable();
             $table->string('placa', 20)->nullable(); // v2.1.0 para ventas a transportistas
 
             // Totales
@@ -85,9 +86,9 @@ return new class extends Migration
             // Campos adicionales v2.1.0
             $table->string('regimenFiscal', 3)->nullable();
             $table->string('agenteRetencion', 5)->nullable();
-            $table->string('contratoProveedorEstado', 10)->nullable(); // Número de CPC
+            $table->string('contratoProveedorEstado', 10)->nullable(); // Nï¿½mero de CPC
             $table->string('maquinaFiscal', 30)->nullable();
-            $table->string('tipoProveedorRegimenMicroempresas', 2)->nullable(); // 01: Contribuyente régimen RIMPE
+            $table->string('tipoProveedorRegimenMicroempresas', 2)->nullable(); // 01: Contribuyente rï¿½gimen RIMPE
 
             // Campos de control SRI
             $table->string('digitoVerificador', 8)->nullable();
@@ -95,7 +96,7 @@ return new class extends Migration
             $table->string('numeroAutorizacion', 49)->nullable();
             $table->string('ambienteAutorizacion', 1)->nullable();
             $table->json('infoAdicional')->nullable();
-            $table->json('motivos')->nullable(); // Para almacenar múltiples motivos de rechazo
+            $table->json('motivos')->nullable(); // Para almacenar mï¿½ltiples motivos de rechazo
             $table->boolean('procesadoSri')->default(false);
 
             // Control de versiones del documento
@@ -106,7 +107,7 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            // Índices
+            // ï¿½ndices
             $table->index('estado');
             $table->index('fechaEmision');
             $table->index(['ruc', 'estab', 'ptoEmi', 'secuencial']);

@@ -24,38 +24,31 @@ class FacturaPago extends Model
     ];
 
     const UNIDADES_TIEMPO = [
-        'dias' => 'Días',
+        'dias' => 'DÃ­as',
         'meses' => 'Meses',
-        'anios' => 'Años'
+        'anios' => 'AÃ±os'
     ];
 
-    // Relación con la factura
     public function factura()
     {
         return $this->belongsTo(Factura::class);
     }
 
-    // Relación con la forma de pago
     public function formaPagoCatalogo()
     {
         return $this->belongsTo(FormaPago::class, 'formaPago', 'codigo');
     }
 
-    // Validar si requiere información bancaria
     public function requiereInfoBancaria()
     {
-        $formasPagoConBanco = ['19', '20', '23', '24']; // Tarjetas, transferencias, depósitos
-        return in_array($this->formaPago, $formasPagoConBanco);
+        return in_array($this->formaPago, ['19', '20', '23', '24']);
     }
 
-    // Validar si requiere plazo
     public function requierePlazo()
     {
-        $formasPagoConPlazo = ['19', '20', '21']; // Crédito, otros con sistema financiero, endoso
-        return in_array($this->formaPago, $formasPagoConPlazo);
+        return in_array($this->formaPago, ['19', '20', '21']);
     }
 
-    // Método para generar la estructura XML según versión
     public function toXML()
     {
         $xml = [
@@ -69,17 +62,10 @@ class FacturaPago extends Model
         }
 
         if ($this->version >= '2.1.0' && $this->requiereInfoBancaria()) {
-            if ($this->institucionFinanciera) {
-                $xml['institucionFinanciera'] = $this->institucionFinanciera;
-            }
-            if ($this->numeroCuenta) {
-                $xml['numeroCuenta'] = $this->numeroCuenta;
-            }
-            if ($this->numeroTarjeta) {
-                $xml['numeroTarjeta'] = $this->numeroTarjeta;
-            }
-            if ($this->propietarioTarjeta) {
-                $xml['propietarioTarjeta'] = $this->propietarioTarjeta;
+            foreach (['institucionFinanciera', 'numeroCuenta', 'numeroTarjeta', 'propietarioTarjeta'] as $campo) {
+                if ($this->$campo) {
+                    $xml[$campo] = $this->$campo;
+                }
             }
         }
 

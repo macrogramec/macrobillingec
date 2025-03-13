@@ -111,6 +111,8 @@
             }
         </style>
     @endif
+    <link rel="stylesheet" href="{{ asset('css/swagger-custom.css') }}">
+
 </head>
 
 <body @if(config('l5-swagger.defaults.ui.display.dark_mode')) id="dark-mode" @endif>

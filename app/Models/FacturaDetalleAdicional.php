@@ -22,19 +22,11 @@ class FacturaDetalleAdicional extends Model
         'ip_creacion'
     ];
 
-    /**
-     * Get the factura that owns the detalle adicional.
-     */
     public function factura()
     {
         return $this->belongsTo(Factura::class);
     }
 
-    /**
-     * Convertir el detalle adicional a formato XML.
-     *
-     * @return array
-     */
     public function toXML()
     {
         return [
@@ -43,23 +35,11 @@ class FacturaDetalleAdicional extends Model
         ];
     }
 
-    /**
-     * Validar longitud máxima según el SRI.
-     *
-     * @return bool
-     */
     public function validarLongitud()
     {
         return strlen($this->nombre) <= 300 && strlen($this->valor) <= 300;
     }
 
-    /**
-     * Método estático para crear múltiples detalles adicionales.
-     *
-     * @param int $facturaId
-     * @param array $detalles
-     * @return Collection
-     */
     public static function crearMultiples($facturaId, array $detalles)
     {
         $orden = 1;
@@ -80,41 +60,13 @@ class FacturaDetalleAdicional extends Model
         return $creados;
     }
 
-    /**
-     * Actualizar el valor de un detalle adicional.
-     *
-     * @param string $valor
-     * @return bool
-     */
-    public function actualizarValor($valor)
-    {
-        if (strlen($valor) > 300) {
-            return false;
-        }
-
-        $this->valor = $valor;
-        return $this->save();
-    }
-
-    /**
-     * Obtener detalles adicionales por factura ordenados.
-     *
-     * @param int $facturaId
-     * @return Collection
-     */
     public static function obtenerPorFactura($facturaId)
     {
         return self::where('factura_id', $facturaId)
-                   ->orderBy('orden')
-                   ->get();
+            ->orderBy('orden')
+            ->get();
     }
 
-    /**
-     * Convertir colección de detalles a formato para XML del SRI.
-     *
-     * @param Collection $detalles
-     * @return array
-     */
     public static function prepararParaXML($detalles)
     {
         return $detalles->map(function ($detalle) {

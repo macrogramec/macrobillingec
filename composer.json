@@ -7,9 +7,14 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "ext-soap": "*",
+        "aws/aws-sdk-php": "^3.339",
+        "darkaonline/l5-swagger": "^8.6",
+        "guzzlehttp/guzzle": "^7.9",
         "laravel/framework": "^11.31",
         "laravel/passport": "^12.3",
-        "laravel/tinker": "^2.9"
+        "laravel/tinker": "^2.9",
+        "league/flysystem-aws-s3-v3": "^3.29"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
